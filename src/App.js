@@ -1,13 +1,23 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import ImgCont from './ImgCont';
 
 function App() {
+  const [dim, setDim] = useState([1000,800]);
 
+  useEffect(() => {
+    setDim([window.innerWidth, window.innerHeight]);
+  }, [])
+
+  console.log('dim', dim);
   return (
     <div className="App">
-        <ImgCont/>
+        <ImgCont width={dim[0]} height={dim[1]}/>
+        <div className="fixed text-black bg-white box"><h1 className="uppercase text-4xl italic">This is art MF 💩!!!</h1>
+          <p className="text-base"> This is an early sketch how you can present your paintings!</p>
+
+        </div>
     </div>
   );
 }
