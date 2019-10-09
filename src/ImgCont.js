@@ -103,7 +103,7 @@ export default function ImgCont(props) {
           onClick={() =>
             setPos(pos.map(p => p.id ===d.id ?({...p, selected:!d.selected}) : p ))}
           style={{
-            transform: `translate3d(${d.x}px, ${d.selected? height/2-200:d.y}px, ${d.selected ? 5000 :d.scale*100}px) scale(${d.scale})`,
+            transform: `translate3d(${d.x}px, ${d.selected? height/2-300:d.y}px, ${d.selected ? 5000 :d.scale*100}px) scale(${d.scale})`,
           }}
         >
           <div style={{
