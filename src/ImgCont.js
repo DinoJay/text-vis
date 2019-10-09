@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import data from "./exampleData";
 import * as d3 from "d3";
 import forceBoundary from "d3-force-boundary";
+import clsx from 'clsx';
 
 const makeScale = () => {
-  return Math.max(0.5, Math.random());
+  return Math.max(0.5, Math.random() * 1.1);
 };
+
+const quotes = ["I am always saying 'Glad to've met you' to somebody I'm not at all glad I met. If you want to stay alive, you have to say that stuff, though.", 'The mark of the immature man is that he wants to die nobly for a cause, while the mark of the mature man is that he wants to live humbly for one.',
+  " That's the thing about girls. Every time they do something pretty, even if they're not much to look at, or even if they're sort of stupid, you fall in love with them, and then you never know where the hell you are. Girls. Jesus Christ. They can drive you crazy. They really can.", "When you're dead, they really fix you up. I hope to hell when I do die somebody has sense enough to just dump me in the river or something. Anything except sticking me in a goddam cemetery. People coming and putting a bunch of flowers on your stomach on Sunday, and all that crap. Who wants flowers when you're dead? Nobody." ]
 
 const paintings = [
 'https://img0.etsystatic.com/032/1/5873189/il_570xN.536535526_p6ab.jpg',
@@ -37,10 +41,6 @@ export default function ImgCont(props) {
   useEffect(() => {
     console.log("ref current", ref.current);
     ref.current.addEventListener("wheel", e => {
-      // console.log("yah", e);
-      // const scrollTop = document.body.scrollTop;
-      // console.log("scrollTop", e.target);
-
 
       setPos(pos =>
         pos.map(( p,i) => ({...p, y:resetY(p, e.deltaY, p.scale, height) }))
@@ -84,35 +84,52 @@ export default function ImgCont(props) {
     let counter =1;
     setInterval(() => {
       setPos(pos =>
-        pos.map(( p,i) => ( { ...p, y: resetY(p, counter, p.scale, height) } ))
+                           pos.map(( p,i) => ( p.selected ? p:{ ...p, y: resetY(p, counter, p.scale, height) } ))
       );
     }, 20)
   }, [height])
 
   return (
     <div
-      className="border-b-4 border-t-4 border-black "
+      className="border-b-8 border-t-8 border-black "
       ref={ref}
-      style={{ width, height: 800, position: "relative", overflow: "hidden" }}
+      style={{ width, height: 800, position: "relative", overflow: "hidden",
+  backgroundColor: 'beige'
+      }}
     >
       {pos.map((d, i) => (
         <div
+          className={ clsx( d.selected && 'z-50',"absolute cursor-pointer " ) }
           onClick={() =>
-            setPos(pos.map(p => p.id ===d.id ?({...p, selected:true}) : p ))}
+            setPos(pos.map(p => p.id ===d.id ?({...p, selected:!d.selected}) : p ))}
           style={{
-            transform: `translate3d(${d.x}px, ${d.y}px, ${d.scale*100}px) scale(${d.scale})`,
-            position: "absolute"
+            transform: `translate3d(${d.x}px, ${d.selected? height/2-200:d.y}px, ${d.selected ? 5000 :d.scale*100}px) scale(${d.scale})`,
           }}
         >
-          <img
-            alt={paintings[i % paintings.length]}
-            src={paintings[i % paintings.length]}
-            style={{
-              opacity: d.selected ? 1:d.scale,
-              width: d.selected ? 400 :r,
-              height: d.selected ? 400 :r
-            }}
-          />
+          <div style={{
+                zIndex: d.selected ? 500: 0,
+                transition: 'all 400ms',
+                opacity: d.selected ? 1:d.scale,
+                width: d.selected ? 400 :r,
+                height: d.selected ? 400 :r
+
+          }}>
+            <img
+              alt={paintings[i % paintings.length]}
+              src={paintings[i % paintings.length]}
+              style={{
+                zIndex: d.selected ? 500: 0,
+                transition: 'all 400ms',
+                opacity: d.selected ? 1:d.scale,
+                width: d.selected ? 400 :r,
+                height: d.selected ? 400 :r
+              }}
+            />
+            <div className={clsx(d.selected ? 'opacity-100' : 'opacity-0', 'p-2 text-black bg-white border-black border-2 italic')}>
+              {quotes[i%quotes.length]}
+
+            </div>
+            </div>
         </div>
       ))}
     </div>

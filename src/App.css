@@ -12,7 +12,6 @@ body {
 }
 
 .App {
-  background-color: beige;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
