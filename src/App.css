@@ -1,3 +1,6 @@
+body {
+  overflow:hidden !important;
+}
 .App {
   text-align: center;
 }
@@ -6,8 +9,8 @@
   height: 40vmin;
 }
 
-.App-header {
-  background-color: #282c34;
+.App {
+  background-color: beige;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
