@@ -17,7 +17,11 @@ const paintings = [
 'https://i.pinimg.com/originals/60/11/4e/60114e4d4dda53facd91d779629ca972.jpg',
 'https://i.pinimg.com/736x/37/05/f8/3705f84e4ae81d0c2073da4e4b6958e7--jd-salinger-painting-portraits.jpg','https://i.pinimg.com/736x/2e/bb/81/2ebb81eb0948939cc51a579ea93ae5f5--jd-salinger-classroom-quotes.jpg',
 'https://i.pinimg.com/736x/b8/94/28/b894287674865d4a1feb8c2123f43a80--writers-portraits-jd-salinger.jpg',
-'https://mbird.com/wp-content/uploads/2011/03/9782020133272FS.jpg'
+'https://mbird.com/wp-content/uploads/2011/03/9782020133272FS.jpg',
+'http://pspguides.net/images/essay-scholarships-2009_68128938.jpg',
+'https://mir-s3-cdn-cf.behance.net/project_modules/disp/776c8610857411.560ec71a4bfb1.jpg',
+'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/salinger-bobby-zeik.jpg',
+'https://2.bp.blogspot.com/-kgJvYpz46iw/Tt86IrMhCII/AAAAAAAADi4/VKBwyu8gE-c/s640/catcher.jpg', 'https://i.etsystatic.com/9414719/r/il/d23c97/1155227448/il_570xN.1155227448_oog4.jpg', 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/a6af3b10857411.560ec807b37c3.jpg'
 ]
 
 
@@ -93,7 +97,7 @@ export default function ImgCont(props) {
     <div
       className="border-b-8 border-t-8 border-black "
       ref={ref}
-      style={{ width, height: 800, position: "relative", overflow: "hidden",
+      style={{ width, height: '80vh', position: "relative", overflow: "hidden",
   backgroundColor: 'beige'
       }}
     >
@@ -125,7 +129,7 @@ export default function ImgCont(props) {
                 height: d.selected ? 400 :r
               }}
             />
-            <div className={clsx(d.selected ? 'opacity-100' : 'opacity-0', 'p-2 text-black bg-white border-black border-2 italic')}>
+            <div className={clsx(d.selected ? 'opacity-100' : 'opacity-0', 'p-2 text-black bg-white border-black border-2 italic')} style={{transition: 'all 300ms'}}>
               {quotes[i%quotes.length]}
 
             </div>

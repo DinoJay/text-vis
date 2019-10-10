@@ -12,12 +12,24 @@ function App() {
 
   console.log('dim', dim);
   return (
-    <div className="App relative">
+    <div className="h-screen w-full relative flex flex-col justify-center items-center overflow-hidden">
         <ImgCont width={dim[0]} height={dim[1]}/>
-        <div className="fixed text-black bg-white box" style={{zIndex:-0}}><h1 className="uppercase text-4xl italic">This is art MotherFucker 💩!!!</h1>
-          <p className="text-base"> This is an early sketch how you can present your paintings!. You can click on the images to expand them and read some text!</p>
 
-        </div>
+        <div className="fixed h-screen w-screen flex pointer-events-none">
+          <div className="bg-white box m-auto"
+            style={{zIndex:-0}}>
+            <h1 className="text-center uppercase text-xl md:text-4xl italic">
+              This is art MotherFucker 💩!!!
+            </h1>
+            <p className="text-base">
+              This is an early sketch how you can present your
+              paintings!.
+                You can click on the images to expand them and read some
+                text!
+              </p>
+
+            </div>
+            </div>
     </div>
   );
 }
