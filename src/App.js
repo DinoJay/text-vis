@@ -5,6 +5,7 @@ import ImgCont from './ImgCont';
 
 function App() {
   const [dim, setDim] = useState([1000,800]);
+  const [random, setRandom] = useState(false);
 
   useEffect(() => {
     setDim([window.innerWidth, window.innerHeight]);
@@ -13,22 +14,22 @@ function App() {
   console.log('dim', dim);
   return (
     <div className="h-screen w-full relative flex flex-col justify-center items-center overflow-hidden">
-        <ImgCont width={dim[0]} height={dim[1]}/>
+        <ImgCont width={dim[0]} height={dim[1]} isGrid={random} />
 
-        <div className="fixed h-screen w-screen flex pointer-events-none">
-          <div className="bg-white box m-auto"
-            style={{zIndex:-0}}>
+          <div className="bg-white h-48 w-1/2 box m-auto fixed left-0 bottom-0 top-0 right-0 flex flex-col items-center"
+          >
             <h1 className="text-center uppercase text-xl md:text-4xl italic">
-              This is art MotherFucker 💩!!!
+              This is J.D. Salinger!! 🚬
             </h1>
-            <p className="text-base">
-              This is an early sketch how you can present your
-              paintings!.
+            <p className="text-lg">
+              Searching for paintings of J.D Salinger on DuckDuckGo gave me some nice Results. <br/>
                 You can click on the images to expand them and read some
-                text!
+                quote!
               </p>
+              <div className="flex">
+                <button onClick={() => setRandom(!random)}className="m-auto text-xl font-bold underline">{ random ? 'Make a Mess!': 'Order!' }</button>
 
-            </div>
+              </div>
             </div>
     </div>
   );
