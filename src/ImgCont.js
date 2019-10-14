@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback} from "react";
 import data from "./exampleData";
 import * as d3 from "d3";
 import forceBoundary from "d3-force-boundary";
 import clsx from 'clsx';
-const setIntervalAsync = (fn, ms) => {
-  new Promise(resolve => resolve(fn())).then(() => {
-    setTimeout(() => setIntervalAsync(fn, ms), ms);
-  });
-};
+// const setIntervalAsync = (fn, ms) => {
+//   new Promise(resolve => resolve(fn())).then(() => {
+//     setTimeout(() => setIntervalAsync(fn, ms), ms);
+//   });
+// };
 
 
 const makeScale = () => {
   return Math.max(0.5, Math.random() * 1.1);
 };
 
-const R = 153;
 const quotes = ["I am always saying 'Glad to've met you' to somebody I'm not at all glad I met. If you want to stay alive, you have to say that stuff, though.", 'The mark of the immature man is that he wants to die nobly for a cause, while the mark of the mature man is that he wants to live humbly for one.',
   " That's the thing about girls. Every time they do something pretty, even if they're not much to look at, or even if they're sort of stupid, you fall in love with them, and then you never know where the hell you are. Girls. Jesus Christ. They can drive you crazy. They really can.", "When you're dead, they really fix you up. I hope to hell when I do die somebody has sense enough to just dump me in the river or something. Anything except sticking me in a goddam cemetery. People coming and putting a bunch of flowers on your stomach on Sunday, and all that crap. Who wants flowers when you're dead? Nobody." ]
 
@@ -34,13 +33,25 @@ const paintings = [
 const prepData = data.map(d => ({ scale: makeScale(), ...d }));
 
 
-const resetY = (p, deltaY, sc, height, pos) => {
-  // console.log('deltaY', deltaY);
-  const dy = deltaY;
-  const np= (p.y + dy )
-  if(np > Math.ceil( height/R )*R+R) return -R// if (np < -R ) return height;
-  return np;
+// const resetY = (p, deltaY, sc, height, pos) => {
+//   // console.log('deltaY', deltaY);
+//   const dy = deltaY;
+//   const np= (p.y + dy )
+//   if(np > Math.ceil( height/R )*R+R) return -R// if (np < -R ) return height;
+//   return np;
+// }
+
+function useMedia(queries, values, defaultValue) {
+  const match = useCallback(() => values[queries.findIndex(q => matchMedia(q).matches)] || defaultValue)
+  const [value, set] = useState(match)
+  useEffect(() => {
+    const handler = () => set(match)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [match])
+  return value
 }
+
 
 const resetYgrid = (p, deltaY, sc, height, pos,R) => {
   const limit=50;
@@ -57,8 +68,13 @@ const resetYgrid = (p, deltaY, sc, height, pos,R) => {
 }
 
 export default function ImgCont(props) {
-  const { width = 1000, height = 800, columns=10, isGrid=false} = props;
+  const { width = 1000, height = 800,  isGrid=false} = props;
+
+  const columns = useMedia(['(min-width: 1500px)', '(min-width: 800px)', '(max-width: 600px)'], [12, 7, 3], 1)
+
   const [pos, setPos] = useState([]);
+
+  const R = 153//width/columns;
   const ref = React.useRef();
   useEffect(() => {
     ref.current.addEventListener("wheel", e => {
@@ -66,13 +82,13 @@ export default function ImgCont(props) {
         pos.map(( p,i) => ({...p, y: resetYgrid(p, e.deltaY, p.scale, height, pos, R) }))
       );
     });
-  }, [height]);
+  }, [R, height]);
 
 
   useEffect(
     () => {
       let h = 0;
-      let heights = new Array(columns).fill(-100);
+      let heights = new Array(columns).fill(-R);
       const visData = prepData.map(( d,i) => {
          const column = heights.indexOf(Math.min(...heights));
 
@@ -84,7 +100,7 @@ export default function ImgCont(props) {
         .forceSimulation()
         .alphaMin(0.5)
         .force("x", d3.forceX(d=> d.tx).strength(isGrid ? 2 :0))
-        .force("y", d3.forceY(d=> d.ty).strength(isGrid ? 1: 0.01))
+        .force("y", d3.forceY(d=> d.ty).strength(isGrid ? 2.4: 0.01))
         .force('coll', d3.forceCollide(100).strength(0.1))
         .force(
           "boundary",
@@ -105,17 +121,17 @@ export default function ImgCont(props) {
           setPos(simulation.nodes());
         });
     },
-    [columns, height, isGrid, width]
+    [R, columns, height, isGrid, width]
   );
   //
   useEffect(() => {
-    let counter =2;
+    let counter = 1;
     setInterval(() => {
       setPos(pos =>
-          pos.map(( p,i) => ( p.selected ? p:{ ...p, y: resetYgrid(p, counter, p.scale, height, pos, R) } ))
+      pos.map(( p,i) => ( p.selected ? p:{ ...p, y: resetYgrid(p, counter, p.scale, height, pos, R) } ))
       );
     }, 4)
-  }, [height])
+  }, [R, height])
 
   return (
     <div
