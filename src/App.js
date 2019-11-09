@@ -16,9 +16,9 @@ function App() {
     <div className="h-screen w-full relative flex flex-col justify-center items-center overflow-hidden">
         <ImgCont width={dim[0]} height={dim[1]} isGrid={random} />
 
-          <div className="bg-white h-48 w-1/2 box m-auto fixed left-0 bottom-0 top-0 right-0 flex flex-col items-center"
+          <div className="absolute bg-white box m-auto flex flex-col items-center"
           >
-            <h1 className="text-center uppercase text-xl md:text-4xl italic">
+            <h1 className="text-center uppercase text-xl md:text-4xl italic underline">
               This is J.D. Salinger!! 🚬
             </h1>
             <p className="text-lg">
